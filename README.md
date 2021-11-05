@@ -6,4 +6,4 @@ Separado en carpetas dividiendo el cuatrimestre en 4 partes
 - Parte 3 -> Hasta el 3° parcialito  
 - Parte 4 -> Hasta el 4° parcialito  
 
-En actualización permanente hasta fin de cuatrimestre
+*En actualización permanente hasta fin de cuatrimestre*
