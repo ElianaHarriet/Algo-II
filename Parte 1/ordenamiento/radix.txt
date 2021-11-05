@@ -1,0 +1,63 @@
+6. (★★) Realizar el seguimiento de ordenar por Radix Sort el siguiente arreglo de cadenas que representan
+versiones. Cada versión tiene el formato a.b.c, donde cada valor a, b y c puede tener un valor entre 0 y 99.
+Considerar que se quiere que quede ordenado primero por la primera componente (a), luego por la segunda (b)
+y finalmente por la tercera (c). Tener en cuenta que, por ejemplo 1.1.3 < 1.1.20, 2.20.8 < 3.0.0.
+["4.3.2", "5.1.2", "10.1.4", "2.1.20", "2.2.1", "4.2.3", "2.1.5", "8.1.2", "5.30.1", "10.0.23"] 
+
+•Como ordenamiento auxiliar se utilizará CountingSort (versión simplificada), que es estable por requerimiento
+de RadixSort (de lo contrario no funcionaría).
+•Cada versión tiene la misma cantidad de componentes -> a, b y c
+•Como se quiere que queden ordenadas primero por a, luego por b, y, finalmente, por c, se comienza ordenando
+por c. (De lo contrario quedarían ordenadas de forma errónea)
+    •Dentro del ordenamiento de c se vuelve a usar RadixSort, para evitar ordenar con CountingSort números es
+    un rango tan grande (99 números). Cada número tiene 2 cifras (los que tienen una con motivos de facilitar el
+    seguimiento se le agregará un 0 delante).
+    ["4.3.02", "5.1.02", "10.1.04", "2.1.20", "2.2.01", "4.2.03", "2.1.05", "8.1.02", "5.30.01", "10.0.23"] 
+    •Como se quieren ordenar por la primera cifra y luego por la segunda, se comienza por la segunda, ahora sí 
+    usamos CountingSort. El rango es de 9 números (de 0 a 9)
+        0    |    1    |    2    |    3    |    4    |    5    |    6    |    7    |    8    |    9
+    "2.1.20" |"2.2.01" |"4.3.02" |"4.2.03" |"10.1.04"|"2.1.05" |    -    |    -    |    -    |    -   
+             |"5.30.01"|"5.1.02" |"10.0.23"|         |         |         |         |         |        
+             |         |"8.1.02" |         |         |         |         |         |         |   
+    Entonces queda
+    -> ["2.1.20", "2.2.01", "5.30.01", "4.3.02", "5.1.02", "8.1.02", "4.2.03", "10.0.23", "10.1.04", "2.1.05"]
+    •De la misma forma se ordana por la primera cifra    
+        0    |    1    |    2    |    3    |    4    |    5    |    6    |    7    |    8    |    9
+    "2.2.01" |    -    |"2.1.20" |    -    |    -    |    -    |    -    |    -    |    -    |    -
+    "5.30.01"|         |"10.0.23"|         |         |         |         |         |         |         
+    "4.3.02" |         |         |         |         |         |         |         |         |
+    "5.1.02" |         |         |         |         |         |         |         |         |
+    "8.1.02" |         |         |         |         |         |         |         |         |
+    "4.2.03" |         |         |         |         |         |         |         |         |
+    "10.1.04"|         |         |         |         |         |         |         |         |
+    "2.1.05" |         |         |         |         |         |         |         |         |
+    Entonces queda
+    -> ["2.2.01", "5.30.01", "4.3.02", "5.1.02", "8.1.02", "4.2.03", "10.1.04", "2.1.05", "2.1.20", "10.0.23"]
+    •Se puede ver como quedaron todos ordenados (teniendo en cuenta únicamente la tercer componente, ya que hasta
+    ahora fue la única parte que se ordenó). Ahora se sacan los 0s que se agregaron, ya que sólo se agregaron a
+    fin de facilitar el seguimiento y no como parte del algoritmo en sí
+    ->> ["2.2.1", "5.30.1", "4.3.2", "5.1.2", "8.1.2", "4.2.3", "10.1.4", "2.1.5", "2.1.20", "10.0.23"]
+•Ahora se prosigue ordenando por la componente b, de la misma forma que con c se agregarán 0s para facilitar el
+seguimiento. De igual manera se utilizará RadixSort, en donde como ordenamiento auxiliar se utuliza CountingSort
+Con el procedimiento igual que con c así queda ordenado:
+    Tras agregar los 0s
+    -> ["2.02.1", "5.30.1", "4.03.2", "5.01.2", "8.01.2", "4.02.3", "10.01.4", "2.01.5", "2.01.20", "10.00.23"]
+    Ordenar por el segundo dígito
+    -> ["5.30.1", "10.00.23", "5.01.2", "8.01.2", "10.01.4", "2.01.5", "2.01.20", "2.02.1", "4.02.3", "4.03.2"]
+    Ordenar por el primer dígito
+    -> ["10.00.23", "5.01.2", "8.01.2", "10.01.4", "2.01.5", "2.01.20", "2.02.1", "4.02.3", "4.03.2", "5.30.1"]
+    •Se puede ver como quedaron todos ordenados teniendo en cuenta las componentes b y c. Ahora se sacan los 0s
+    que se agregaron, ya que sólo se agregaron a fin de facilitar el seguimiento y no como parte del algoritmo
+    en sí
+    ->> ["10.0.23", "5.1.2", "8.1.2", "10.1.4", "2.1.5", "2.1.20", "2.2.1", "4.2.3", "4.3.2", "5.30.1"]
+•Finalmente, se ordena por la componente a. Al igual que con b y con c se utilizará RadixSort para ordenar cada
+cifra, y al momento de ordenar por x cifra se utilizará CountingSort.
+    Se agregan 0s a fin de facilitar el seguimiento
+    -> ["10.0.23", "05.1.2", "08.1.2", "10.1.4", "02.1.5", "02.1.20", "02.2.1", "04.2.3", "04.3.2", "05.30.1"]
+    Se ordena por el segundo dígito
+    -> ["10.0.23", "10.1.4", "02.1.5", "02.1.20", "02.2.1", "04.2.3", "04.3.2", "05.1.2", "05.30.1", "08.1.2"]
+    Se ordena por el primer dígito
+    -> ["02.1.5", "02.1.20", "02.2.1", "04.2.3", "04.3.2", "05.1.2", "05.30.1", "08.1.2", "10.0.23", "10.1.4"]
+    Se sacan los 0s y ya quedó ordenado completamente
+    =>> ["2.1.5", "2.1.20", "2.2.1", "4.2.3", "4.3.2", "5.1.2", "5.30.1", "8.1.2", "10.0.23", "10.1.4"]
+

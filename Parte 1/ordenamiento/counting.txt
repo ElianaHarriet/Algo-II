@@ -1,0 +1,173 @@
+5. (★★) Hacer el seguimiento de counting sort para ordenar por año las siguientes obras:
+    1988 - Crónicas del Ángel Gris
+    2000 - Los Días del Venado
+    1995 - Alta Fidelidad
+    1987 - Tokio Blues
+    2005 - En Picada
+    1995 - Crónica del Pájaro que Da Cuerda al Mundo
+    1995 - Ensayo Sobre la Ceguera
+    2005 - Los Hombres que No Amaban a las Mujeres
+¿Cuál es el orden del algoritmo? ¿Qué sucede con el orden de los elementos de un mismo año,
+respecto al orden inicial, luego de finalizado el algoritmo? Justificar brevemente.
+
+•Son 8 obras, las cuales se encuentran en un rango de 18 años (1987 a 2005)
+•Se comienza por contar las frecuencias
+1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 
+    
+    Crónicas del Ángel Gris -> 1988 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 
+    Los Días del Venado -> 2000 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  0 
+    Alta Fidelidad -> 1995 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  0 
+    Tokio Blues -> 1987 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  1 |  0 |  1 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  0 
+    En Picada -> 2005 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  1 |  0 |  1 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 
+    Crónica del Pájaro que Da Cuerda al Mundo -> 1995 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  2 |  0 |  1 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 
+    Ensayo Sobre la Ceguera -> 1995 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  3 |  0 |  1 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 
+    Los Hombres que No Amaban a las Mujeres -> 2005 ->> +1
+  0 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  3 |  0 |  1 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  2 
+
+1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+  1 |  1 |  0 |  0 |  0 |  0 |  0 |  0 |  3 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  2 
+•Se hacen las sumas acumuladas para saber dónde corresponde posisionar a cada elemento
+1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 
+  0 | 0+1 -> posición de 1987 en el arreglo de sumas acumuladas + valor de 1987 en el arreglo de frecuencias 
+  0 |  1 | 1+1 -> posición de 1988 en el arreglo de sumas acumuladas + valor de 1988 en el arreglo de frecuencias
+  0 |  1 |  2 | 2+0 -> posición de 1989 en el arreglo de sumas acumuladas + valor de 1989 en el arreglo de frecuencias
+  0 |  1 |  2 |  2 | 2+0 -> posición de 1990 en el arreglo de sumas acumuladas + valor de 1990 en el arreglo de frecuencias
+(De la misma forma se sigue hasta llegar a completar el arreglo de sumas acumuladas)
+  0 |  1 |  2 |  2 |  2 |  2 |  2 |  2 |  2 |  5 |  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6
+•Usando el arreglo de sumas acumuladas ya se sabe en qué posición van las obras, solo queda posicionarlas
+mientras se actualiza el arreglo de las sumas acumuladas
+    Crónicas del Ángel Gris -> 1988 ->> En el arreglo dice 1, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> 
+    1 -> Crónicas del Ángel Gris
+    2 -> 
+    3 -> 
+    4 -> 
+    5 -> 
+    6 -> 
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      0 | 1+1|  2 |  2 |  2 |  2 |  2 |  2 |  2 |  5 |  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6
+
+    Los Días del Venado -> 2000 ->> En el arreglo dice 5, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> 
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> 
+    3 -> 
+    4 -> 
+    5 -> Los Días del Venado (2000)
+    6 -> 
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      0 |  2 |  2 |  2 |  2 |  2 |  2 |  2 |  2 |  5 |  5 |  5 |  5 | 5+1|  6 |  6 |  6 |  6 |  6
+
+    Alta Fidelidad -> 1995 ->> En el arreglo dice 2, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> 
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> Alta Fidelidad (1995)
+    3 -> 
+    4 -> 
+    5 -> Los Días del Venado (2000)
+    6 -> 
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      0 |  2 |  2 |  2 |  2 |  2 |  2 |  2 | 2+1|  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6 |  6
+    
+    Tokio Blues -> 1987 ->> En el arreglo dice 0, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> Tokio Blues
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> Alta Fidelidad (1995)
+    3 -> 
+    4 -> 
+    5 -> Los Días del Venado (2000)
+    6 -> 
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+     0+1|  2 |  2 |  2 |  2 |  2 |  2 |  2 |  3 |  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6 |  6
+    
+    En Picada -> 2005 ->> En el arreglo dice 6, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> Tokio Blues (1987)
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> Alta Fidelidad (1995)
+    3 -> 
+    4 -> 
+    5 -> Los Días del Venado (2000)
+    6 -> En Picada (2005)
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      1 |  2 |  2 |  2 |  2 |  2 |  2 |  2 | 3+1|  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6 |  7
+
+    Ensayo Sobre la Ceguera -> 1995 ->> En el arreglo dice 4, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> Tokio Blues (1987)
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> Alta Fidelidad (1995)
+    3 -> Crónica del Pájaro que Da Cuerda al Mundo(1995)
+    4 -> Ensayo Sobre la Ceguera (1995)
+    5 -> Los Días del Venado (2000)
+    6 -> En Picada (2005)
+    7 -> 
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      1 |  2 |  2 |  2 |  2 |  2 |  2 |  2 | 4+1|  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6 |  7
+
+    Los Hombres que No Amaban a las Mujeres -> 2005 ->> En el arreglo dice 7, por lo que la colocamos en esa posición y sumamos 1 al contador
+    ------------------------------
+    0 -> Tokio Blues (1987)
+    1 -> Crónicas del Ángel Gris (1988)
+    2 -> Alta Fidelidad (1995)
+    3 -> Crónica del Pájaro que Da Cuerda al Mundo (1995)
+    4 -> Ensayo Sobre la Ceguera (1995)
+    5 -> Los Días del Venado (2000)
+    6 -> En Picada (2005)
+    7 -> Los Hombres que No Amaban a las Mujeres (2005)
+    ------------------------------
+    1987|1988|1989|1990|1991|1992|1993|1994|1995|1996|1997|1998|1999|2000|2001|2002|2003|2004|2005
+      1 |  2 |  2 |  2 |  2 |  2 |  2 |  2 |  5 |  5 |  5 |  5 |  5 |  6 |  6 |  6 |  6 |  6 | 7+1
+
+•Se llegó al final de las obras, así quedan ordenadas:
+------------------------------
+0 -> Tokio Blues (1987)
+1 -> Crónicas del Ángel Gris (1988)
+2 -> Alta Fidelidad (1995)
+3 -> Crónica del Pájaro que Da Cuerda al Mundo(1995)
+4 -> Ensayo Sobre la Ceguera (1995)
+5 -> Los Días del Venado (2000)
+6 -> En Picada (2005)
+7 -> Los Hombres que No Amaban a las Mujeres (2005)
+------------------------------
+
+•{ Orden del algoritmo }•
+Siendo n la cantidad de obras y k el rango de años en los que se pueden encontrar 
+Crear el arreglo de frecuencias para el rango de años => O(k)
+Contar las frecuencias => O(n)
+Crear el arreglo de sumas acumuladas y realizar las sumas => O(k)
+Ubicar obra por obra => O(n)
+Total ->> O(2(k+n)) =>> O(k+n)
+
+•{ Obras del mismo año }•
+Las obras que son del mismo año (en 1995: Alta Fidelidad, Crónica del Pájaro que Da Cuerda al Mundo, Ensayo Sobre la Ceguera; 
+en 2005: En Picada, Los Hombres que No Amaban a las Mujeres) tras el ordenamiento se mantienen en el mismo orden en que aparecían en
+la lista original. Eso se debe a que el algoritmo es estable ->> Un algoritmo de ordenamiento es estable si los elementos que son
+iguales entre sí para el algoritmo mantienen su orden relativo, es decir, las obras del año 2005 para el algoritmo son iguales debido
+a que lo único que importa es el año, pero más allá de eso son obras distintas. En el orden original aparece primero  En Picada, y
+luego Los Hombres que No Amaban a las Mujeres, tras ordenar las obras este orden se mantuvo. Lo mismo sucede con las obras de 1995,
+por esto mismo CountingSort es estable.

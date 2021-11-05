@@ -1,0 +1,90 @@
+5. Diseñar un algoritmo de ordenamiento no comparativo para ordenar un conjunto de cartas
+españolas (las utilizadas en el juego de truco). Se desea que se vean primero las cartas de
+oros, luego las de espadas, luego las de bastos y finalmente las de copas; y a su vez cada carta
+del mismo palo resulte ordenada de menor a mayor. Proponer un ejemplo y mostrar un
+seguimiento.
+a) ¿Es estable? Justificar
+b) ¿Cuál es el orden del algoritmo? Justificar
+c) ¿Qué condiciones satisface el problema para poder usar el algoritmo propuesto?
+
+Conjunto de cartas ejemplo:
+6 de espadas
+12 de espadas
+9 de oro
+5 de copas
+6 de copas
+1 de oro
+11 de basto
+
+Cartas españolas -> 2 componentes, el palo y el número
+El algoritmo a utulizar es RadixSort, ya que trabaja con elementos que tengan varias componentes
+Como se quiere que se ordene primero por palo y luego por número, se comienza ordenando por número
+(De lo contrario quedaría mal ordenado -> quedaría primero por número y luego por palo)
+
+Para ordenar por número se utiliza un algoritmo de ordenamiento auxiliar -> CountingSort (Versión simplificada)
+Para utilizar CountingSort se debe conocer el rango en el que pueden estar los elementos, en este
+caso el rango el rango es de 12 posibles números. Se crea un arreglo y se van posicionando las cartas
+según su número
+        1   |       2   |       3   |       4   |        5   |       6    |       7   |       8   |       9   |       10  |       11  |       12
+1 de oro    |     -     |      -    |    -      |5 de copas  |6 de espadas|       -   |      -    |9 de oro   |     -     |11 de basto|12 de espadas
+                                                             |6 de copas  |
+Entonces quedan
+1 de oro 
+5 de copas
+6 de espadas
+6 de copas 
+9 de oro 
+11 de basto
+12 de espadas
+
+Ya se puede ver como las cartas están ordenadas por número, ahora se las ordena por palo, usando CountingSort
+nuevamente. Lo importante de usar CountingSort es que es un algoritmo estable, de lo contrario al momento de 
+ordenar por palo se perdería todo lo ordenado por números
+CountingSort -> Rango -> 4 posibles palos
+Se los acomoda en el arreglo primero los oros, ya que son los primeros que se quier que se vean, luego espadas,
+luego bastos y finalmente copas
+    Oro |   Espada    |   Basto   |   Copa
+1 de oro|6 de espadas |11 de basto|5 de copas
+9 de oro|12 de espadas|           |6 de copas
+
+Entonces quedan
+1 de oro
+9 de oro
+6 de espadas
+12 de espadas
+11 de basto
+5 de copas
+6 de copas
+De esta forma las cartas ya quedan ordenadas
+
+•{ Estabilidad del algoritmo }•
+CountingSort es estable, al momento de ordenar por palos es donde se puede ver bien esto, al momento de ordenar por
+palos todos los números dejan de tener importancia para el algoritmo, entonces es como si fuese que todas las de oro
+sean iguales, lo mismo con las de espada, basto y copa. Al momento de ordenar por palos, las cartas de los números más
+chicos estaban por delante de las de los números más grandes, tras ordenar esto sigue así, esto significa que CountingSort
+es estable.
+RadixSort, el algoritmo principal, también es estable, ya que en cada paso al mover de lugar los elementos se hace con
+CountingSort, lo cual hace que RadixSort también sea estable.
+
+•{ Orden del algoritmo }•
+Algoritmo auxiliar -> CountingSort
+Siendo n la cantidad de cartas y k el rango de números o palos
+Crear un arreglo con cada rang donde posicionar las cartas -> O(k)
+Posicionar las cartas -> O(n)
+Total ->> O(k+n)
+
+Algoritmo RadixSort
+Siendo d la cantidad de componentes (palos y números en este caso), se llama d veces a CountingSort
+Por lo tanto es de un orden O(d(k+n))
+
+•{ Condiciones necesarias }•
+Para poder utilizar RadixSort se necesita:
+Conocer la cantidad de componentes ✓
+Los elementos deben tener la misma cantidad de componentes o muy similar ✓
+- Cada carta tiene palo y número, esos son los componentes
+
+Para poder utilizar CountingSort se necesita:
+Que los datos sean enumerables ✓
+Conocer el rango, y que no sea demasiado extenso ✓
+- En el caso de ordenar por número los datos se enumeran del 1 al 12 (rango conocido y no muy grande)
+- Ordenar por palo -> 4 posibles palos
