@@ -246,4 +246,3 @@ void* lista_iter_borrar(lista_iter_t* iter) {
     iter->lista->largo--;
     return dato_act;
 }
-
