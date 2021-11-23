@@ -21,9 +21,34 @@
 # •adyacentes(self, v)
 # •str
 
+def lista_ciclo(padre, inicio, fin):
+    v = fin
+    camino = []
+    while v != inicio:
+        camino.append(v)
+        v = padre[v]
+    camino.append(inicio)
+    return camino[::-1]
+
+def _dfs(grafo, v, visitados, padre):
+    visitados[v] = True
+    for w in grafo.adyacentes(v):
+        if w in visitados:
+            if w != padre[v]:
+                return lista_ciclo(padre, w, v)
+    else:
+        padre[w] = v
+        ciclo = _dfs(grafo, w, visitados, padre)
+        if ciclo:
+            return ciclo
+
 def obtener_ciclo(grafo):
-    '''
-    Recibe un grafo que implementa la interfaz descrita en el enunciado
-    Devuelve una lista con algún ciclo dentro del grafo.
-    '''
-    pass
+    visitados = {}
+    padre = {}
+    for v in grafo.obtener_vertices():
+        if v not in visitados:
+            ciclo = _dfs(grafo, v, visitados, padre)
+            if ciclo:
+                return ciclo
+
+# Orden -> O(V + E) [Estando el grafo implementado en una lista de adyacencias] #

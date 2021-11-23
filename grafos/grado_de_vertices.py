@@ -1,3 +1,4 @@
+# 3
 # Implementar una función que determine el:
 # a. El grado de todos los vértices de un grafo no dirigido.
 # b. El grado de salida de todos los vértices de un grafo dirigido.
@@ -19,21 +20,21 @@
 # •adyacentes(self, v)
 # •str
 
-def grado_vertices(grafo): # a
+def grado_vertices(grafo): # a -> O(V + E)
     vertices = grafo.obtener_vertices()
     diccionario = {}
     for vertice in vertices:
         diccionario[vertice] = len(grafo.adyacentes(vertice))
     return diccionario
 
-def grado_salida(grafo): # b
+def grado_salida(grafo): # b -> O(V + E)
     vertices = grafo.obtener_vertices()
     diccionario = {}
     for vertice in vertices:
         diccionario[vertice] = len(grafo.adyacentes(vertice))
     return diccionario
 
-def contar_entrada(grafo, vertice):
+def contar_entrada(grafo, vertice): # -> O(V) + V * O(V) -> O(V^2)
     vertices = grafo.obtener_vertices()
     contador = 0
     for v in vertices:
@@ -41,9 +42,11 @@ def contar_entrada(grafo, vertice):
             contador += 1
     return contador
 
-def grado_entrada(grafo): # c
+def grado_entrada(grafo): # c -> O(V + E) [me da duda ._.]
     vertices = grafo.obtener_vertices()
     diccionario = {}
     for vertice in vertices:
         diccionario[vertice] = contar_entrada(grafo, vertice)
     return diccionario
+
+# Ordenes para un grafo implementado con listas de adyacencia (idk que tan bien estén)
