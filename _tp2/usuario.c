@@ -7,12 +7,12 @@
 
 
 
-typedef struct usuario {
+struct usuario {
     char* nombre;
     heap_t* posts;
     int pos_lista;
     hash_t* post;
-} usuario_t;
+};
 
 typedef struct info_post_heap {
     int pos_usuario_heap;

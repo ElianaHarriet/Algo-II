@@ -12,7 +12,7 @@
  *                            STRUCTS
  * *********************************************************************/
 typedef struct algo_gram {
-    const hash_t* usuarios;
+    hash_t* usuarios;
     usuario_t* logged;
     hash_t* posts;
     size_t ult_id;
@@ -59,18 +59,18 @@ hash_t* obtener_usuarios(char* path){
         printf("Error: archivo fuente inaccesible\n");
         return NULL;
     }
-    hash_t* usuarios = hash_crear(NULL);   ///usuario_destruir
+    hash_t* usuarios = hash_crear(usuario_destruir);
     char* linea = NULL;
     size_t tam;
     int pos_lista = 0;
     while((getline(&linea, &tam, archivo)) != EOF){
         linea[strlen(linea) - 1] = '\0';
         usuario_t* usuario = usuario_crear(linea, pos_lista);
-        // printf("%s\n", get_nombre(usuario));
         hash_guardar(usuarios, linea, usuario);
         pos_lista++;
     }
     free(linea);
+    fclose(archivo);
     return usuarios;
 }
 
@@ -78,7 +78,7 @@ algo_gram_t* algo_gram_crear(char* path) {
     algo_gram_t* algo = malloc(sizeof(algo_gram_t));
     if (!algo) return NULL;
     algo->usuarios = obtener_usuarios(path);
-    algo->posts = hash_crear(NULL);
+    algo->posts = hash_crear(post_destruir);
     algo->ult_id = 0;
     algo->logged = NULL;
     return algo;
@@ -151,7 +151,7 @@ void ver_posts(algo_gram_t* gram){
     sprintf(texto, "%s dijo: %s", get_usuario(post), get_post_txt(post));
     char post_id[20];
     sprintf(post_id, "Post ID %zu", get_post_id(post));
-    fprintf(stdout, "%s\n%s\n%s\n", like, texto,post_id);
+    fprintf(stdout, "%s\n%s\n%s\n", post_id, texto, like);
     return;
 }
 
@@ -188,6 +188,12 @@ void imprimir_hash(const hash_t* hash){
     hash_iter_destruir(iter);
 }
 
+void algo_gram_destruir(algo_gram_t* gram){
+    hash_destruir(gram->usuarios);
+    hash_destruir(gram->posts);
+    free(gram);
+}
+
 int main(int argc, char* argv[]){
     // printf("%s\n", "Bienvenido a AlgoGram");
     if(argc != 2){
@@ -195,12 +201,13 @@ int main(int argc, char* argv[]){
         return -1;
     }
     algo_gram_t* gram = algo_gram_crear(argv[1]);
-    // imprimir_hash(gram->usuarios);
     if(gram == NULL){
+        algo_gram_destruir(gram);
         fprintf(stdout, "%s", "Error: No se pudo crear el algo_gram\n");
         return -1;
     }
     if(!gram->usuarios){
+        algo_gram_destruir(gram);
         fprintf(stdout, "%s", "Error: No se pudo cargar los usuarios\n");
         return -1;
     }
@@ -234,10 +241,14 @@ int main(int argc, char* argv[]){
         } else if(strcmp("ver_siguiente_feed", linea) == 0){
             ver_posts(gram);
         }
+        else{
+            fprintf(stdout, "%s", "Error: Comando invalido\n");
+        }
         leidos = getline(&linea, &capacidad, stdin);
         linea[strlen(linea) - 1] = '\0';
     }
     free(linea);
+    algo_gram_destruir(gram);
 }
 
 // gcc -g -std=c99 -Wall -Wconversion -Wno-sign-conversion -Werror -o pruebas *.c

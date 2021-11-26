@@ -10,14 +10,14 @@
 
 
 
-typedef struct post {
+struct post {
     size_t id;
     char* txt;
     char* usuario;
     size_t cant_likes;
     abb_t* usuarios_like;
     int pos_lista_usuario;
-} post_t;
+};
 
 post_t* post_crear(size_t id, char* txt, char* usuario, int pos_lista_usuario) {
     post_t* post = malloc(sizeof(post_t));

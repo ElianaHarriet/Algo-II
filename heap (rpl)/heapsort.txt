@@ -1,0 +1,37 @@
+Realizar el seguimiento del algoritmo heapsort para ordenar el siguiente arreglo: [ 4, 7, 8, 14, 10, 9, 16, 2, 3, 1 ]. 
+
+Se le da forma de heap (usando downheap)
+  0  1  2   3   4  5   6  7  8  9  -> posiciones
+[ 4, 7, 8, 14, 10, 9, 16, 2, 3, 1 ]
+[ 16, 14, 9, 7, 10, 4, 8, 2, 3, 1 ]
+
+Se busca el máximo (arr[0]) y se lo swappea con el último
+[ 1, 14, 9, 7, 10, 4, 8, 2, 3, 16 ]
+Se reduce la cantidad lógica del arreglo (el final ya está ordenado), se le hace downheap a la raiz
+[ 14, 10, 9, 7, 1, 4, 9, 2, 3 | 16]
+
+Se repiten los últimos pasos hasta que la cantidad lógica del arreglo sea 1
+[ 3, 10, 9, 7, 1, 4, 9, 2 | 14, 16]
+[ 10, 7, 9, 3, 1, 4, 8, 2 | 14, 16]
+
+[ 2, 7, 9, 3, 1, 4, 8 | 10, 14, 16]
+[ 9, 7, 8, 3, 1, 4, 2 | 10, 14, 16]
+
+[ 2, 7, 8, 3, 1, 4 | 9, 10, 14, 16]
+[ 8, 7, 4, 3, 1, 2 | 9, 10, 14, 16]
+
+[ 2, 7, 4, 3, 1 | 8, 9, 10, 14, 16]
+[ 7, 3, 4, 2, 1 | 8, 9, 10, 14, 16]
+
+[ 1, 3, 4, 2 | 7, 8, 9, 10, 14, 16]
+[ 4, 3, 1, 2 | 7, 8, 9, 10, 14, 16]
+
+[ 2, 3, 1 | 4, 7, 8, 9, 10, 14, 16]
+[ 3, 2, 1 | 4, 7, 8, 9, 10, 14, 16]
+
+[ 1, 2 | 3, 4, 7, 8, 9, 10, 14, 16]
+[ 2, 1 | 3, 4, 7, 8, 9, 10, 14, 16]
+
+[ 1 | 2, 3, 4, 7, 8, 9, 10, 14, 16] 
+
+[ 1, 2, 3, 4, 7, 8, 9, 10, 14, 16] -> Arreglo ordenado

@@ -34,19 +34,10 @@ def grado_salida(grafo): # b -> O(V + E)
         diccionario[vertice] = len(grafo.adyacentes(vertice))
     return diccionario
 
-def contar_entrada(grafo, vertice): # -> O(V) + V * O(V) -> O(V^2)
-    vertices = grafo.obtener_vertices()
-    contador = 0
-    for v in vertices:
-        if grafo.estan_unidos(v, vertice):
-            contador += 1
-    return contador
-
-def grado_entrada(grafo): # c -> O(V + E) [me da duda ._.]
-    vertices = grafo.obtener_vertices()
-    diccionario = {}
-    for vertice in vertices:
-        diccionario[vertice] = contar_entrada(grafo, vertice)
-    return diccionario
-
-# Ordenes para un grafo implementado con listas de adyacencia (idk que tan bien estén)
+def grado_entrada(grafo): # c
+    grados = {}
+    for v in grafo.obtener_vertices():
+        grados[v] = grados.get(v, 0)
+        for w in grafo.adyacentes(v):
+            grados[w] = grados.get(w, 0) + 1
+    return grados

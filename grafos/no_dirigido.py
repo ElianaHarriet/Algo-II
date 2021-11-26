@@ -15,7 +15,7 @@
 # •adyacentes(self, v)
 # •str
 
-def no_dirigido(grafo): # -> O(V + E)
+def no_dirigido(grafo): # (Creo) -> O(V + E) [Para lista de adyacencias] o O(V^2) [Para matriz de adyacencias]
     vertices = grafo.obtener_vertices()
     for v in vertices:
         for w in grafo.adyacentes(v):
