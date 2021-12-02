@@ -56,17 +56,17 @@ bool hash_guardar(hash_t* hash, const char* clave, void* dato) {
 function insert(x) is
     if lookup(x) then
         return
-    end if
+    end if 
     while Max-Loop <= then
         if T1[h1(x)] = NULL then
             T1[h1(x)] := x
             return
-        end if
+        end if 
         x <-> T1[h1(x)]
         if T2[h2(x)] = NULL then
             T2[h2(x)] := x
             return
-        end if
+        end if 
         x <-> T2[h2(x)]
     repeat
     rehash()

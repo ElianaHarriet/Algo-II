@@ -4,7 +4,7 @@
 
 // Implementar una primitiva para el árbol binario size_t ab_quiebres(const ab_t*)
 // que, dado un árbol binario, nos devuelva la cantidad de quiebres que tiene. La
-// primitiva no debe modificar el árbol.
+// primitiva no debe modif icar el árbol.
 #include "ab.h"
 
 size_t _ab_quiebres(const ab_t* ab, char rama) {

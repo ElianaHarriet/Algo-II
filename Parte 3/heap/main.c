@@ -11,7 +11,7 @@ void pruebas_heap_volumen_catedra(size_t, bool);
  *                        PROGRAMA PRINCIPAL
  * *****************************************************************/
 
-#ifdef CORRECTOR
+#if def CORRECTOR
 int main(int argc, char *argv[]) {
     if (argc > 1) {
         // Asumimos que nos están pidiendo pruebas de volumen.
@@ -26,4 +26,4 @@ int main(int argc, char *argv[]) {
 
     return failure_count() > 0;
 }
-#endif
+#endif 

@@ -5,23 +5,26 @@
 #include "hash.h"
 #include "usuario.h"
 #include "post.h"
+#include "algogram.h"
 
 
 
 /* *********************************************************************
- *                            STRUCTS
+ *                    DEFINICIÓN DEL STRUCT ALGOGRAM
  * *********************************************************************/
-typedef struct algo_gram {
+
+struct algo_gram {
     hash_t* usuarios;
     usuario_t* logged;
     hash_t* posts;
     size_t ult_id;
     hash_t* hash_pos_usuarios;
-} algo_gram_t;
+};
+
 
 
 /* *********************************************************************
- *                            IMPLEMENTACION
+ *                       FUNCIONES AUXILIARES
  * *********************************************************************/
 
 int open_file(char* name, FILE** archivo) {
@@ -32,7 +35,7 @@ int open_file(char* name, FILE** archivo) {
     return 0;
 }
 
-hash_t* obtener_usuarios(char* path){
+hash_t* obtener_usuarios(char* path) {
     FILE* archivo;
     int val_archivo = open_file(path, &archivo);
     if (val_archivo == -1) {
@@ -43,7 +46,7 @@ hash_t* obtener_usuarios(char* path){
     char* linea = NULL;
     size_t tam;
     int pos_lista = 0;
-    while((getline(&linea, &tam, archivo)) != EOF){
+    while((getline(&linea, &tam, archivo)) != EOF) {
         linea[strlen(linea) - 1] = '\0';
         usuario_t* usuario = usuario_crear(linea, pos_lista);
         hash_guardar(usuarios, linea, usuario);
@@ -53,6 +56,12 @@ hash_t* obtener_usuarios(char* path){
     fclose(archivo);
     return usuarios;
 }
+
+
+
+/* *********************************************************************
+ *                            IMPLEMENTACIÓN
+ * *********************************************************************/
 
 algo_gram_t* algo_gram_crear(char* path) {
     algo_gram_t* algo = malloc(sizeof(algo_gram_t));
@@ -64,7 +73,11 @@ algo_gram_t* algo_gram_crear(char* path) {
     return algo;
 }
 
-void login(algo_gram_t* gram, const hash_t* usuarios, char* nombre){
+hash_t* get_usuarios(algo_gram_t* gram) {
+    return gram->usuarios;
+}
+
+void login(algo_gram_t* gram, const hash_t* usuarios, char* nombre) {
     if (gram->logged != NULL) {
         fprintf(stdout, "%s", "Error: Ya habia un usuario loggeado\n");
         return;
@@ -78,7 +91,7 @@ void login(algo_gram_t* gram, const hash_t* usuarios, char* nombre){
     fprintf(stdout, "Hola %s\n", get_nombre(usuario));
 }
 
-void logout(algo_gram_t* gram){
+void logout(algo_gram_t* gram) {
     if (gram->logged == NULL) {
         fprintf(stdout, "%s", "Error: no habia usuario loggeado\n");
         return;
@@ -87,20 +100,20 @@ void logout(algo_gram_t* gram){
     gram->logged = NULL;
 }
 
-void publicar(algo_gram_t* gram, char* texto){
-    if (gram->logged == NULL){
+void publicar(algo_gram_t* gram, char* texto) {
+    if (gram->logged == NULL) {
         fprintf(stdout, "%s", "Error: no habia usuario loggeado\n");
         return;
     }
     post_t* post = post_crear(gram->ult_id, texto, get_nombre(gram->logged), get_pos_lista(gram->logged));
-    if(!post) return;
+    if (!post) return;
     hash_t* posts = gram->posts;
     char id[10];
     sprintf(id, "%zu", get_post_id(post));
     hash_guardar(posts, id, post);
     gram->ult_id++;
     hash_iter_t* iter_usuarios = hash_iter_crear(gram->usuarios);
-    if(iter_usuarios == NULL) return;
+    if (iter_usuarios == NULL) return;
     while (!hash_iter_al_final(iter_usuarios)) {
         usuario_t* usuario = hash_obtener(gram->usuarios, hash_iter_ver_actual(iter_usuarios));
         if (strcmp(get_nombre(usuario), get_nombre(gram->logged)) != 0) {
@@ -112,14 +125,14 @@ void publicar(algo_gram_t* gram, char* texto){
     fprintf(stdout, "Post publicado\n");
 }
 
-void ver_posts(algo_gram_t* gram){
-    if (gram->logged == NULL){
+void ver_posts(algo_gram_t* gram) {
+    if (gram->logged == NULL) {
         fprintf(stdout, "%s", "Usuario no loggeado o no hay mas posts para ver\n");
         return;
     }
     usuario_t* usuario = gram->logged;
     heap_t* posts = get_posts(usuario);
-    if(heap_esta_vacio(posts)){
+    if (heap_esta_vacio(posts)) {
         fprintf(stdout, "%s", "Usuario no loggeado o no hay mas posts para ver\n");
         return;
     }
@@ -132,8 +145,8 @@ void ver_posts(algo_gram_t* gram){
     return;
 }
 
-void dar_like(algo_gram_t* gram, char* id){
-    if (gram->logged == NULL || !hash_pertenece(gram->posts, id)){
+void dar_like(algo_gram_t* gram, char* id) {
+    if (gram->logged == NULL || !hash_pertenece(gram->posts, id)) {
         fprintf(stdout, "%s", "Error: Usuario no loggeado o Post inexistente\n");
         return;
     }
@@ -155,69 +168,8 @@ void mostrar_likes(algo_gram_t* gram, char* id) {
     post_mostrar_likes(post);
 }
 
-
-void algo_gram_destruir(algo_gram_t* gram){
+void algo_gram_destruir(algo_gram_t* gram) {
     hash_destruir(gram->usuarios);
     hash_destruir(gram->posts);
     free(gram);
 }
-
-
-int main(int argc, char* argv[]){
-    // printf("%s\n", "Bienvenido a AlgoGram");
-    if(argc != 2){
-        fprintf(stdout, "%s", "Error: Cantidad de argumentos invalida\n");
-        return -1;
-    }
-    algo_gram_t* gram = algo_gram_crear(argv[1]);
-    if(gram == NULL){
-        algo_gram_destruir(gram);
-        fprintf(stdout, "%s", "Error: No se pudo crear el algo_gram\n");
-        return -1;
-    }
-    if(!gram->usuarios){
-        algo_gram_destruir(gram);
-        fprintf(stdout, "%s", "Error: No se pudo cargar los usuarios\n");
-        return -1;
-    }
-    char* linea = NULL;
-    size_t capacidad = 0;
-    ssize_t leidos = getline(&linea, &capacidad, stdin);
-    linea[strlen(linea) - 1] = '\0';
-    while (leidos > 0) {
-        if (strcmp("login", linea) == 0) {
-            leidos = getline(&linea, &capacidad, stdin);
-            linea[strlen(linea) - 1] = '\0';
-            char* nombre = linea;
-            login(gram, gram->usuarios, nombre);
-        } else if (strcmp("logout", linea) == 0) {
-            logout(gram);
-        } else if (strcmp("publicar", linea) == 0){
-            leidos = getline(&linea, &capacidad, stdin);
-            linea[strlen(linea) - 1] = '\0';
-            char* texto = linea;
-            publicar(gram, texto);
-        } else if (strcmp("likear_post", linea) == 0) {
-            leidos = getline(&linea, &capacidad, stdin);
-            linea[strlen(linea) - 1] = '\0';
-            char* id = linea;
-            dar_like(gram, id);
-        } else if(strcmp("mostrar_likes", linea) == 0){
-            leidos = getline(&linea, &capacidad, stdin);
-            linea[strlen(linea) - 1] = '\0';
-            char* id = linea;
-            mostrar_likes(gram, id);
-        } else if(strcmp("ver_siguiente_feed", linea) == 0){
-            ver_posts(gram);
-        }
-        else{
-            fprintf(stdout, "%s", "Error: Comando invalido\n");
-        }
-        leidos = getline(&linea, &capacidad, stdin);
-        linea[strlen(linea) - 1] = '\0';
-    }
-    free(linea);
-    algo_gram_destruir(gram);
-}
-
-// gcc -g -std=c99 -Wall -Wconversion -Wno-sign-conversion -Werror -o pruebas *.c

@@ -6,7 +6,7 @@
 // add_all(m) le suma m a todos los valores.
 
 // Proponer una implementación donde todas las operaciones sean O(1).
-// Justificar el orden de las operaciones.
+// Justif icar el orden de las operaciones.
 
 // (En general un ejercicio así podría plantearse solo describiendo, pero para quienes
 // quieran corroborarlo, en esta plataforma se encuentra definido el ejercicio en C)

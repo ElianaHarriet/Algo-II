@@ -10,6 +10,10 @@
 
 
 
+/* *********************************************************************
+ *                    DEFINICIÓN DEL STRUCT POST
+ * *********************************************************************/
+
 struct post {
     size_t id;
     char* txt;
@@ -18,6 +22,23 @@ struct post {
     abb_t* usuarios_like;
     int pos_lista_usuario;
 };
+
+
+
+/* *********************************************************************
+ *                       FUNCIONES AUXILIARES
+ * *********************************************************************/
+
+bool imprimir_usuario(const char* clave, void* dato, void* extra) {
+    printf("\t%s\n", clave);
+    return true;
+}
+
+
+
+/* *********************************************************************
+ *                       PRIMITIVAS DE USUARIO
+ * *********************************************************************/
 
 post_t* post_crear(size_t id, char* txt, char* usuario, int pos_lista_usuario) {
     post_t* post = malloc(sizeof(post_t));
@@ -55,26 +76,21 @@ int get_pos_lista_usuario(post_t* post) {
     return post->pos_lista_usuario;
 }
 
-void post_destruir(void* _post) {
-    post_t* post = _post;
-    if (!post) return;
-    free(post->txt);
-    abb_destruir(post->usuarios_like);
-    free(post);
-}
-
 void post_likear(post_t* post, char* usuario) {
     if (abb_pertenece(post->usuarios_like, usuario)) return;
     abb_guardar(post->usuarios_like, usuario, NULL);
     post->cant_likes++;
 }
 
-bool imprimir_usuario(const char* clave, void* dato, void* extra) {
-    printf("\t%s\n", clave);
-    return true;
-}
-
 void post_mostrar_likes(post_t* post) {
     fprintf(stdout, "El post tiene %zu likes:\n", post->cant_likes);
     abb_in_order(post->usuarios_like, imprimir_usuario, NULL);
+}
+
+void post_destruir(void* _post) {
+    post_t* post = _post;
+    if (!post) return;
+    free(post->txt);
+    abb_destruir(post->usuarios_like);
+    free(post);
 }
