@@ -24,26 +24,6 @@ typedef struct algo_gram {
  *                            IMPLEMENTACION
  * *********************************************************************/
 
-
-// hash_t* hash_pos_usuarios(algo_gram_t* gram, FILE** archivo) {    // hash : eliana= 0 ......
-//     hash_t* pos_usuarios = hash_crear(free);
-//     if (!pos_usuarios) return NULL;
-//     char* linea = NULL;
-//     size_t tam;
-//     char* linea = NULL;
-//     size_t tam;
-//     size_t i = 0;
-//     while((getline(&linea, &tam, archivo)) != EOF){
-//         size_t* pos = malloc(sizeof(size_t));
-//         *pos = i;
-//         hash_guardar(pos_usuarios, linea, pos);
-//     }
-//     return pos_usuarios;
-// }
-
-
-
-
 int open_file(char* name, FILE** archivo) {
     *archivo = fopen(name, "r");
     if (*archivo == NULL) {
@@ -84,19 +64,18 @@ algo_gram_t* algo_gram_crear(char* path) {
     return algo;
 }
 
-bool login(algo_gram_t* gram, const hash_t* usuarios, char* nombre){
+void login(algo_gram_t* gram, const hash_t* usuarios, char* nombre){
     if (gram->logged != NULL) {
         fprintf(stdout, "%s", "Error: Ya habia un usuario loggeado\n");
-        return false;
+        return;
     }
     usuario_t* usuario = hash_obtener(usuarios, nombre);
     if (!usuario) {
         fprintf(stdout,"%s","Error: usuario no existente\n");
-        return false;
+        return;
     }
     gram->logged = usuario;
     fprintf(stdout, "Hola %s\n", get_nombre(usuario));
-    return true;
 }
 
 void logout(algo_gram_t* gram){
@@ -147,11 +126,9 @@ void ver_posts(algo_gram_t* gram){
     post_t* post = sig_post(gram->logged);
     char like[20];
     sprintf(like, "Likes: %zu", get_post_cant_likes(post));
-    char texto[300];
-    sprintf(texto, "%s dijo: %s", get_usuario(post), get_post_txt(post));
     char post_id[20];
     sprintf(post_id, "Post ID %zu", get_post_id(post));
-    fprintf(stdout, "%s\n%s\n%s\n", post_id, texto, like);
+    fprintf(stdout, "%s\n%s dijo: %s\n%s\n", post_id, get_usuario(post), get_post_txt(post), like);
     return;
 }
 
@@ -178,21 +155,13 @@ void mostrar_likes(algo_gram_t* gram, char* id) {
     post_mostrar_likes(post);
 }
 
-void imprimir_hash(const hash_t* hash){
-    hash_iter_t* iter = hash_iter_crear(hash);
-    while(!hash_iter_al_final(iter)){
-        printf("(hash clave) actual hash iter -> %s\n", hash_iter_ver_actual(iter));
-        printf("(hash valor) usuario nombre -> %s\n", get_nombre(hash_obtener(hash, hash_iter_ver_actual(iter))));
-        hash_iter_avanzar(iter);
-    }
-    hash_iter_destruir(iter);
-}
 
 void algo_gram_destruir(algo_gram_t* gram){
     hash_destruir(gram->usuarios);
     hash_destruir(gram->posts);
     free(gram);
 }
+
 
 int main(int argc, char* argv[]){
     // printf("%s\n", "Bienvenido a AlgoGram");
@@ -220,7 +189,7 @@ int main(int argc, char* argv[]){
             leidos = getline(&linea, &capacidad, stdin);
             linea[strlen(linea) - 1] = '\0';
             char* nombre = linea;
-            login(gram, gram->usuarios, nombre); // -> da un bool (por si fuera necesario)
+            login(gram, gram->usuarios, nombre);
         } else if (strcmp("logout", linea) == 0) {
             logout(gram);
         } else if (strcmp("publicar", linea) == 0){

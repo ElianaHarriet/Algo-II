@@ -19,8 +19,6 @@ void post_destruir(void* _post);
 
 void post_likear(post_t* post, char* usuario);
 
-bool imprimir_usuario(const char* clave, void* dato, void* extra);
-
 void post_mostrar_likes(post_t* post);
 
 #endif // POST_H

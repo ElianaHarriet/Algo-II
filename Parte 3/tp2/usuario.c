@@ -7,12 +7,12 @@
 
 
 
-typedef struct usuario {
+struct usuario {
     char* nombre;
     heap_t* posts;
     int pos_lista;
     hash_t* post;
-} usuario_t;
+};
 
 typedef struct info_post_heap {
     int pos_usuario_heap;
@@ -30,17 +30,11 @@ int afinidad(const void* usuario_post_1, const void* usuario_post_2) {
 
     int distancia_1 = distancia(info_1->pos_usuario_heap, get_pos_lista_usuario(info_1->post));
     int distancia_2 = distancia(info_2->pos_usuario_heap, get_pos_lista_usuario(info_2->post));
-
-    // fprintf(stderr, "\nEs el heap del usuario de la línea %d\n", info_1->pos_usuario_heap);
-    // fprintf(stderr, "Se compara el post de %s con el de %s\n", get_usuario(info_1->post), get_usuario(info_2->post));
-    // fprintf(stderr, "La distancia de %s es -> %d | ", get_usuario(info_1->post), distancia_1);
-    // fprintf(stderr, "La distancia de %s es -> %d\n", get_usuario(info_2->post), distancia_2);
-    // fprintf(stderr, "La función retorna %d\n\n", (distancia_1 - distancia_2) * -1);
     
     size_t post_id_1 = get_post_id(info_1->post);
     size_t post_id_2 = get_post_id(info_2->post);
 
-    return (distancia_1 - distancia_2) * -1 != 0 ? (distancia_1 - distancia_2) * -1 :
+    return (distancia_2 - distancia_1) != 0 ? (distancia_2 - distancia_1) :
             post_id_1 > post_id_2 ? -1 : 1;
 }
 
@@ -102,7 +96,6 @@ void usuario_agregar_post(usuario_t* usuario, post_t* post){
     info_post_heap_t* info_post = info_post_crear(usuario->pos_lista, post);
     if(!info_post) return;
     heap_encolar(usuario->posts, info_post);
-    // printf("usuario: %s, ver max : %s\n", get_nombre(usuario) ,get_post_txt(heap_ver_max(usuario->posts)));
 }
 
 post_t* sig_post(usuario_t* usuario){
@@ -114,4 +107,3 @@ post_t* sig_post(usuario_t* usuario){
     return post;
 }
 
-//ver prox
