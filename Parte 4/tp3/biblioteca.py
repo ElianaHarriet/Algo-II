@@ -3,7 +3,6 @@ from random import shuffle
 
 # - # - # - # - # - # - # Constantes # - # - # - # - # - # - #
 
-ITERACIONES_LABEL = 50
 DAMPING_FACTOR = 0.85
 K = 0.0000001
 
@@ -174,10 +173,8 @@ def label_propagation(grafo, vertice, labels, dict_comunidad, entradas):
     generando conjuntos de vertices
     """
     aleatorio = grafo.obtener_vertices()
-    shuffle(aleatorio)
-    
-    i = 1
-    while (i < ITERACIONES_LABEL):
+
+    while (True):
         cambio = False
         for v in aleatorio:
             entradas_v = entradas[v]
@@ -193,10 +190,6 @@ def label_propagation(grafo, vertice, labels, dict_comunidad, entradas):
         
         if not cambio:
             break
-        i += 1
-        
-    if cambio:
-        label_propagation(grafo, vertice, labels, dict_comunidad, entradas)
 
 
 def pr(grafo, salidas, n, dict_pr): # -> O(P + L)

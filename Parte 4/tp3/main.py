@@ -58,6 +58,7 @@ def maquina(grafo):
             pagina = parametros[0]
             comunidad_ = comunidades(grafo,pagina)
             print(", ".join(comunidad_))
+            print(len(comunidad_))
 
         elif comando == "navegacion":
             pagina = parametros[0]

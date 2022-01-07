@@ -2,29 +2,16 @@
 from netstats import *
 import sys
 
-# Listar operaciones (obligatorio, sin puntos)
-# Camino más corto (★)                         ||Hecho||   FUNCIONA 1
-# Artículos más importantes (★★★)           ||Hecho||    FUNCIONA 3   
-# Conectividad (★★)                           ||Hecho||   FUNCIONA 2 
-# Ciclo de n artículos (★★★)                  ||Hecho||  FUNCIONA 3
-# Lectura a las 2 a.m. (★★)                   ||Hecho||   FUNCIONA 2
-# Diametro (★)                                 ||Hecho||   FUNCIONA 1
-# Todos en Rango (★)                           ||Hecho||   FUNCIONA 1
-# Comunidades (★★)                            ||Hecho||   FUNCIONA 2
-# Navegacion por primer link (★)               ||Hecho||   FUNCIONA 1 
-# Coeficiente de Clustering (★★)              ||Hecho||     CASI
-
-# PUNTOS HASTA EL MOMENTO -> 8 / 18
-# Puntos incluyendo el tema de Sam -> 14 / 18
-
 def maquina(grafo):
     for line in sys.stdin:
 
         comando_parametros = line.rstrip()
         comando = comando_parametros.split(" ")[0]
         parametros = " ".join(comando_parametros.split(" ")[1:]).split(",")
+
         if comando == "listar_operaciones":
             listar_operaciones()
+
         elif comando == "camino":
             desde = parametros[0]
             hasta = parametros[1]
@@ -71,6 +58,7 @@ def maquina(grafo):
             pagina = parametros[0]
             comunidad_ = comunidades(grafo,pagina)
             print(", ".join(comunidad_))
+            print(len(comunidad_))
 
         elif comando == "navegacion":
             pagina = parametros[0]
@@ -80,12 +68,9 @@ def maquina(grafo):
         elif comando == "clustering":
             pagina = parametros[0] if len(parametros) > 0 else None
             clustering_ = clustering(grafo, pagina) if pagina else clustering_global(grafo)
-            clustering_ = round(clustering_, 3)
             print(clustering_)
         
-        
-
-
+    
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Cantidad de agrumentos inválida")
@@ -101,4 +86,4 @@ if __name__ == "__main__":
                 grafo.agregar_vertice(vertice)
                 for arista in aristas:
                     grafo.agregar_arista(vertice, arista)
-            maquina(grafo)
+        maquina(grafo)

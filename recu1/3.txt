@@ -1,0 +1,42 @@
+3. Indicar Verdadero o Falso, justificando de forma concisa en cualquier caso.
+a) Radix sort puede no ser estable dependiendo de la implementación.
+b) Si corremos Mergesort sobre un arreglo ordenado, la complejidad va a ser O(1).
+c) La complejidad de Counting Sort es menor que la de Radix Sort.
+
+
+a) Falso -> Radix sort siempre es estable ya que para implementarlo se utiliza un
+ordenamiento auxiliar que tiene que ser estable, de lo contrario en cada paso ordenaría
+una componente (ej: según dígitos del número) y al paso siguiente se perdería lo ordenado.
+Como es imposible implementar Radix sort con un ordenamiento auxiliar que no sea estable,
+es imposible que Radix sort no sea estable ya que de lo contrario no funcionaría.
+
+b) Falso -> Mergesort no varía en su complejidad según se parta de un arreglo más ordenado
+o más desordenado
+Ya que es un algoritmo de división y conquista, se puede utilizar el teorema maestro:
+ - En cada llamada recursiva el arreglo se divide en 2, y se hace una llamada por cada mitad (Siempre)
+ - Todo lo que no es llamada recursiva -> O(n) (Siempre)
+ A = 2, B = 2, C = 1
+ log_{B}(A) = 1 = C -> T(n) = O(n^C log(n))
+  => T(n) = O(n log(n)) (Siempre)
+
+c) Falso / Depende
+Complejidad de Counting Sort:
+Siendo n la cantidad de elementos y k el largo del rango en el que se pueden ubicar los elementos
+Crear el arreglo de frecuencias para el rango => O(k)
+Contar las frecuencias => O(n)
+Crear el arreglo de sumas acumuladas y realizar las sumas => O(k)
+Ubicar elemento por elemento => O(n)
+Total ->> O(2(k+n)) =>> O(k+n)
+Un uso apropiado de Counting Sort es cuando k no es muy grande, de esta forma Countingsort es lineal
+
+Complejidad de Radix Sort:
+Siendo n la cantidad de elementos y d la cantidad de componentes, se hace un ordenamiento (del auxiliar)
+por cada componente (d). Preferentemente el ordenamiento auxiliar es lineal (ej: Counting Sort), ya que
+de lo contrario la complejidad del algoritmo sería otra y peor.
+De esta forma, la complejidad del algoritmo es O(d * AUX), donde AUX es la complejidad del ordenamiento
+auxiliar.
+Si d es no es muy grande (caso similar al de Counting Sort con k) y el ordenamiento auxiliar es lineal,
+Radix Sort es lineal. Por este motivo la afirmación es falsa.
+Sin embargo, si el ordenamiento auxiliar no es lineal (ej: Mergesort), la complejidad del algoritmo sería
+peor. Por ejemplo, si se usara Mergesort, la complejidad sería O(d * n log(n)), por más que d sea muy chico,
+1 por ejemplo, Radix Sort ya no sería lineal y en ese caso sí que sería menor la complejidad de Counting Sort.

@@ -21,5 +21,5 @@ void downheap(void*** arreglo, cmp_func_t cmp, size_t i, size_t cantidad) {
 
 void heap_cambiar_prioridad(heap_t* heap, cmp_func_t nueva_cmp) {
     heap->cmp = nueva_cmp;
-    heapif y(heap->datos, heap->cant, heap->cmp);
+    heapify(heap->datos, heap->cant, heap->cmp);
 }
