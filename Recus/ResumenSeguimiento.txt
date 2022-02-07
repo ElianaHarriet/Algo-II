@@ -1,0 +1,125 @@
+╔===============╗
+║ Camino mínimo ║
+╚===============╝
+
+::BFS::
+-> Camino mínimo en cantidad de aristas
+-> O(V + E)
+1. Se inicia un diccionario de visitados, uno de padres y otro de orden. También una cola de prioridad.
+2. Se agarra el nodo desde el cual se quieren obtener los caminos mínimos para comenzar el recorrido. Se lo agrega a visitados, a padres (su padre es None), a orden (su orden es 0) y a la cola de prioridad.
+3. Si la cola no está vacía, se saca un nodo de la cola de prioridad.
+4. Del nodo que se desencoló se revizan sus adyacentes, y por cada uno:
+	A. Si el adyacente no fue visitado:
+		- A este adyacente se lo agrega a visitados.
+		- Se lo agrega al diccionario de padres (su padre es el nodo de donde vengo (el desencolado)), se lo agrega al diccionario de orden (su orden es el orden del nodo de donde vengo + 1).
+		- Se lo agrega a la cola de prioridad.
+	B. Si el adyacente fue visitado no se hace nada y se sigue con el algoritmo.
+5. Se vuelve al paso 3 hasta que la cola no esté vacía, si lo está entonces se terminó el recorrido.
+
+::Dijkstra::
+-> Camino mínimo en peso
+-> O(V + E logV)
+1. Se inicia un diccionario de padres y otro de distancias. También un heap de mínimos.
+	- El diccionario de distancias se inicia con 0 para el nodo desde el cual se quieren obtener los caminos mínimos y distancia infinito para el resto.
+2. Se agarra el nodo desde el cual se quieren obtener los caminos mínimos para comenzar el recorrido. Se lo agrega a padres (su padre es None). Se lo encola en el heap con distancia 0.
+3. Si el heap no está vacío, se saca un nodo del heap.
+4. Del nodo que se desencoló [se lo llamará A por practicidad] se revizan sus adyacentes, y por cada uno [se lo llamará B por practicidad]:
+	¿dist[B] > dist[A] + peso(A, B)?
+	a. Si la rta es que sí, entonces:
+		- Se actualiza el diccionario de distancias, en donde dist[B] = dist[A] + peso(A, B).
+		- Se actualiza el diccionario de padres en donde el padre de B es A.
+		- Se encola a B en el heap con su nueva distancia.
+	b. Si la rta es que no entonces no se hace nada y se sigue con el algoritmo.
+5. Se vuelve al paso 3 hasta que el heap no esté vacío, si lo está entonces se terminó el recorrido.
+
+::Bellman-Ford::
+-> Camino mínimo en peso
+-> Si hay un ciclo negativo es detectado
+-> O(V * E)
+1. Se inicia un diccionario de padres y otro de distancias. También un heap de mínimos.
+	- El diccionario de distancias se inicia con 0 para el nodo desde el cual se quieren obtener los caminos mínimos y distancia infinito para el resto.
+2. Se obtienen todas las aristas y se les asigna un orden.
+3. Se itera V veces, en donde por cada iteración:
+	Se comienza por la primer arista del orden asignado
+	i. Se toma la arista, el nodo origen será llamado A (por practicidad), el nodo destino será llamado B.
+	¿dist[B] > dist[A] + peso(A, B)?
+		a. Si la rta es que sí, entonces:
+			- Se actualiza el diccionario de distancias, en donde dist[B] = dist[A] + peso(A, B).
+			- Se actualiza el diccionario de padres en donde el padre de B es A.
+		b. Si la rta es que no entonces no se hace nada y se sigue con el algoritmo.
+	ii. Se pasa a la arista siguiente y se vuelve al paso i, si no hay arista siguiente se terminó una iteración.
+4. Se realiza una última iteración para ver si hay o no ciclos negativos:
+	Se comienza por la primer arista del orden asignado
+	i. Se toma la arista, el nodo origen será llamado A (por practicidad), el nodo destino será llamado B.
+	¿dist[B] > dist[A] + peso(A, B)?
+		a. Si la rta es que sí, entonces es que hay un ciclo negativo, si es así se devuelve None (o alguna excepción o loque el problema que se vaya a resolver requiera).
+		b. Si la rta es que no entonces no se hace nada y se sigue con el algoritmo.
+	ii. Se pasa a la arista siguiente y se vuelve al paso i, si no hay arista siguiente se terminó una iteración.
+5. Si se llegó hasta acá no hay ciclos negativos, se terminó el recorrido.
+
+===
+
+╔=====╗
+║ MST ║
+╚=====╝
+
+::Prim::
+-> O(E logV)
+1. Se empieza por un vértice aleatorio.
+2. Se meten en un heap todas las aristas del vértice (las que involucren vértices no visitados, las otras se ignoran).
+3. Saco una arista del heap (cmp -> peso minimo), si el destino no está visitado la agrego al árbol.
+4. Se vuelve al paso 2.
+
+::Kruskal::
+-> Obtiene todo el bosque de tendido mínimo en caso en que el grafo tenga más de una componente conexa
+-> O(E logV)
+1. Se ordenan las aristas de menor a mayor.
+2. Se saca una arista:
+	¿Origen y destino pertenecen a un mismo conjunto?
+	A. Si la rta es que sí se ignora la arista y se sigue con el algoritmo.
+	B. Si la rta es que no se la agrega al árbol.
+3. Hasta que no haya mas aristas se vuelve al paso 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+::Dijkstra::						
+1. Se inicia un diccionario de padres y otro de distancias. También un heap de mínimos.	
+	- El diccionario de distancias se inicia con 0 para el nodo desde el cual se
+	quieren obtener los caminos mínimos y distancia infinito para el resto.
+2. Se agarra el nodo desde el cual se quieren obtener los caminos mínimos para comenzar		
+el recorrido. Se lo agrega a padres (su padre es None). Se lo encola en el heap con
+distancia 0.
+3. Si el heap no está vacío, se saca un nodo del heap.											
+4. Del nodo que se desencoló [se lo llamará A por practicidad] se revizan sus adyacentes,	
+y por cada uno [se lo llamará B por practicidad]:
+	¿dist[B] > dist[A] + peso(A, B)?														
+	a. Si la rta es que sí, entonces:
+		- Se actualiza el diccionario de distancias, en donde dist[B] = dist[A] + peso(A, B).
+		- Se actualiza el diccionario de padres en donde el padre de B es A.
+		- Se encola a B en el heap con su nueva distancia.						
+	b. Si la rta es que no entonces no se hace nada y se sigue con el algoritmo.
+5. Se vuelve al paso 3 hasta que el heap no esté vacío, si lo está entonces se terminó el
+algoritmo.
+
+::Complejiad::
+(V: # vértices, E: # aristas)
+Inicializar el resto de diccionarios -> O(1)
+Inicializar el diccionario de dist -> O(V)
+Al ir por cada adyacente: (E veces)
+		Actualizar los diccionarios -> O(1)
+		Encolar y desencolar del heap (Ya que en el heap se encola como máximo E veces (1 vez por cada
+		adyacente al que se le mejora la distancia)) -> O(logE) -> O(logV²) -> O(2logV) -> O(logV)
+	=> O(E logV)
+Total ==> O(V + E logV)
