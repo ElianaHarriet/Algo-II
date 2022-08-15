@@ -1,4 +1,4 @@
-### Algoritmos II (2C2021)
+### Algoritmos II (2C2021 Buchwald)
 
 - Parte 1 -> Hasta el 1° parcialito  
 - Parte 2 -> Hasta el 2° parcialito  
