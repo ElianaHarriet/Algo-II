@@ -83,6 +83,33 @@ int elemento_desordenado(int arr[], size_t n) {
     return _elemento_desordenado(arr, 0, n);
 } // T(n) = T(n/2) + O(n/2) = T(n/2) + O(n) =>> Por teorema maestro •{T(n) = O(n)}•
 
+/*
+::Otra forma de resolverlo::
+def elemento_desordenado(arr):
+    return _elemento_desordenado(arr, 0, len(arr) - 1)
+
+def _elemento_desordenado(arr, desde, hasta):
+    if desde >= hasta:
+        return -1
+    medio = (desde + hasta) // 2
+    if arr[medio] > arr[medio + 1]:
+        return arr[medio]
+    if arr[medio - 1] > arr[medio]:
+        return arr[medio]
+    izq = _elemento_desordenado(arr, desde, medio - 1)
+    if izq != -1:
+        return izq
+    der = _elemento_desordenado(arr, medio + 1, hasta)
+    return der
+    
+
+ejemplo = [1, 2, 3, 4, 5, 6, 4, 8, 9]
+print(elemento_desordenado(ejemplo))
+
+ejemplo = [1, 2, 9, 3, 4, 5, 6, 7, 8, 9]
+print(elemento_desordenado(ejemplo))
+*/
+
 // Se tiene un arreglo tal que [1, 1, 1, …, 0, 0, …] (es decir, unos seguidos de ceros). Se pide una función de
 // orden O(log(n)) que encuentre el índice del primer 0. Si no hay ningún 0 (solo hay unos), debe devolver -1.
 int _primer_cero(int arreglo[], size_t desde, size_t hasta) {
