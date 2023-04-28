@@ -13,7 +13,7 @@ size_t _ab_quiebres(const ab_t* ab, char rama) {
     }
     
     size_t izq = _ab_quiebres(ab->izq, 'i');
-    size_t der = _ab_quiebres(ab->der, 'd')
+    size_t der = _ab_quiebres(ab->der, 'd');
     
     if (rama == 'd' && ab->izq && !ab->der) {
         return 1 + izq;
