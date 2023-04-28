@@ -11,13 +11,17 @@ size_t _ab_quiebres(const ab_t* ab, char rama) {
     if (!ab) {
         return 0;
     }
+    
+    size_t izq = _ab_quiebres(ab->izq, 'i');
+    size_t der = _ab_quiebres(ab->der, 'd')
+    
     if (rama == 'd' && ab->izq && !ab->der) {
-        return 1 + _ab_quiebres(ab->izq, 'i');
+        return 1 + izq;
     }
     if (rama == 'i' && ab->der && !ab->izq) {
-        return 1 + _ab_quiebres(ab->der, 'd');
+        return 1 + der;
     }
-    return _ab_quiebres(ab->izq, 'i') + _ab_quiebres(ab->der, 'd');
+    return izq + der;
 }
 
 size_t ab_quiebres(const ab_t* ab) {
